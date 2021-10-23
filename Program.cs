@@ -6,9 +6,9 @@ namespace lab2
     {
         static int[][] GetMas()
         {
-            int[][] result_mas;
+            int[][] result_mas = null;
 
-
+            return result_mas;
         }
         static void Main(string[] args)
         {
