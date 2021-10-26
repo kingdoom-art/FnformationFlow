@@ -85,10 +85,18 @@ namespace lab2
                 n = n.Pow(m);
             }
 
-            foreach(var c in all_matrix)
+            Matrix sum_matrix = all_matrix.First().Clone();
+            for(int i = 0; i < all_matrix.Count(); i++)
             {
-                c.ShowMatrix();
+                all_matrix[i].ShowMatrix();
+                if (i != 0)
+                {
+                    sum_matrix += all_matrix[i];
+                }
             }
+
+            sum_matrix.ShowMatrix();
+            
         }
     }
 }

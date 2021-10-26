@@ -16,6 +16,8 @@ namespace lab2
         public int[] row_mu;
         [NonSerialized]
         public static string mu = "  \u03B4";
+        [NonSerialized]
+        public bool is_sum_matrix = false;
         //степень матрицы
         public int step = 1;
         public int count;
@@ -52,11 +54,6 @@ namespace lab2
             WriteMU();
         }
 
-        public Matrix(int[][] root_mas, int[] column_mu)
-        {
-            this.root_mas = root_mas;
-        }
-
         private void WriteMU()
         {
             //считаем невыговариваемую букву
@@ -76,7 +73,7 @@ namespace lab2
 
         public void ShowMatrix()
         {
-            Console.WriteLine("A" + step);
+            Console.WriteLine("A" + (is_sum_matrix ? "\u2a0a" : step.ToString()));
             Console.Write("   ");
             for(int i = 0; i < count; i++)
             {
@@ -134,6 +131,25 @@ namespace lab2
             }
 
             return obj;
+        }
+
+        public static Matrix operator +(Matrix a, Matrix b)
+        {
+            Matrix result = a.Clone();
+            for (int i = 0; i < a.count; i++)
+            {
+                for (int j = 0; j < a.count; j++)
+                {
+                    result.root_mas[i][j] = a.root_mas[i][j] + b.root_mas[i][j];
+                }
+                result.column_mu[i] = a.column_mu[i] + b.column_mu[i];
+                result.row_mu[i] = a.row_mu[i] + b.row_mu[i];
+            }
+
+            result.is_sum_matrix = true;
+            result.step = -1;
+
+            return result;
         }
     }
 }
