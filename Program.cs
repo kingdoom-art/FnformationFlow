@@ -168,7 +168,7 @@ namespace lab2
             Console.WriteLine("6. Определение висящих вершин");
             var m1 = matrix.GetRowSumIsZero(false).ToList();
             var m2 = matrix.GetRowSumIsZero().ToList();
-            var m_res = m1.Except(m2);
+            var m_res = m1.Intersect(m2);
 
             if (m_res.Count() == 0)
             {
