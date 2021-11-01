@@ -15,8 +15,6 @@ namespace lab2
         //сумма элементов в строке
         public int[] row_mu;
         [NonSerialized]
-        public static string mu = "  \u03B4";
-        [NonSerialized]
         public bool is_sum_matrix = false;
         //степень матрицы
         public int step = 1;
@@ -71,16 +69,21 @@ namespace lab2
             }
         }
 
+        public string GetMatrixName()
+        {
+            return "A" + (is_sum_matrix ? Program.sum : step.ToString());
+        }
+
         public void ShowMatrix()
         {
-            Console.WriteLine("A" + (is_sum_matrix ? "\u2a0a" : step.ToString()));
+            Console.WriteLine(GetMatrixName());
             Console.Write("   ");
             for(int i = 0; i < count; i++)
             {
                 Console.Write(String.Format("{0,3}", i + 1));
             }
                 
-            Console.WriteLine(mu);
+            Console.WriteLine(Program.mu);
 
             for(int i = 0; i < count; i++)
             {
@@ -89,7 +92,7 @@ namespace lab2
                 Console.WriteLine(String.Format("{0,3}", row_mu[i]));
             }
 
-            Console.Write(mu);
+            Console.Write(Program.mu);
             column_mu.ToList().ForEach(e => Console.Write(String.Format("{0,3}", e)));
             Console.WriteLine();
         }
@@ -150,6 +153,88 @@ namespace lab2
             result.step = -1;
 
             return result;
+        }
+
+        /// <summary>
+        /// Возвращает элементы с пустыми входящими\исходящими потоками
+        /// </summary>
+        /// <param name="flag">По умолчанию - входящие</param>
+        /// <returns></returns>
+        public IEnumerable<int> GetRowSumIsZero(bool flag = true)
+        {
+            for(int i = 0; i < count; i++)
+            {
+                if((column_mu[i] == 0 & flag)||(row_mu[i] == 0 & !flag))
+                {
+                    yield return i+1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Возвращает элементы с не пустыми входящими\исходящими потоками
+        /// </summary>
+        /// <param name="flag">По умолчанию - входящие</param>
+        /// <returns></returns>
+        public IEnumerable<int> GetRowSumNotZero(bool flag = true)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if ((column_mu[i] != 0 & flag) || (row_mu[i] != 0 & !flag))
+                {
+                    yield return i+1;
+                }
+            }
+        }
+
+        public bool CheckContour()
+        {
+            for(int i = 0; i < count; i++)
+            {
+                if(root_mas[i][i] != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Метод возвращает количество исходящих/входящих потоков из вершины
+        /// </summary>
+        /// <param name="ind">индекс вершины</param>
+        /// <param name="flag">по умолчанию считаем входящие</param>
+        /// <returns></returns>
+        public int InformationPoint(int ind, bool flag = true)
+        {
+            return flag ? column_mu[ind] : row_mu[ind];
+        }
+
+        public int CountWay(int i, int j)
+        {
+            return root_mas[i][j];
+        }
+
+        public IEnumerable<int> ColumnNotZero(int col)
+        {
+            for(int i = 0; i < count; i++)
+            {
+                if(root_mas[i][col] != 0)
+                {
+                    yield return i;
+                }
+            }
+        }
+
+        public IEnumerable<int> RowNotZero(int row)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (root_mas[row][i] != 0)
+                {
+                    yield return i;
+                }
+            }
         }
     }
 }
